@@ -1,0 +1,23 @@
+{
+	"manifest_version": 2,
+	"name": "Memex7",
+	"version": "0.1",
+
+	"description": "Records and organizes tabs as you research",
+	"homepage_url": "https://github.com/mirdaki/memex7",
+
+	"icons": {
+		"48": "icons/google-circles-extended.svg",
+		"96": "icons/google-circles-extended.svg"
+	},
+
+	"permissions": [
+		"activeTab"
+	],
+	
+	"browser_action": {
+		"default_icon": "icons/google-circles-extended.svg",
+		"default_title": "Memex7",
+		"default_popup": "popup/context-menu.html"
+	}
+}
