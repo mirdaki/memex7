@@ -11,13 +11,14 @@
 		"96": "icons/google-circles-extended.svg"
 	},
 
-	"permissions": [
-		"activeTab"
-	],
 	
+	"background": {
+		"scripts": ["background/background-script.js"]
+	},
+
 	"browser_action": {
-		"default_icon": "icons/google-circles-extended.svg",
-		"default_title": "Memex7",
-		"default_popup": "popup/context-menu.html"
-	}
+    "default_icon": "icons/google-circles-extended.svg",
+    "default_title": "Memex7",
+    "default_popup": "popup/context-menu.html"
+  }
 }
