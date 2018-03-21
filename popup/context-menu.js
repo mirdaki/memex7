@@ -2,7 +2,7 @@
 function listenForClicks() 
 {
 	document.addEventListener("click", (e) => {
-		// Log somthing happened
+		// Log something happened
 		console.log(`Memex7: You did somthing!`);
 
 		// Just log the error to the console
@@ -23,9 +23,3 @@ function reportExecuteScriptError(error)
 
 console.log(`Memex7: Was loaded!`);
 listenForClicks();
-
-function notifyExtension(e) {
-  if (e.target.tagName != "A") {
-    return;
-  }
-  browser.runtime.sendMessage({"url": e.target.href});

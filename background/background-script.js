@@ -1,16 +1,30 @@
-console.log(`Memex7: The background script was loaded!`);
+console.log(`Memex7: The background script is loading`);
 
-function heloWolrd(param)
+var newTab = false;
+var originIdForNewTab = -1;
+
+function logOnHistoryStateUpdated(details)
 {
-  console.log(`Memex: Hello ${param}!`)
+  console.log("The url: " + details.url);
+  console.log("Tab ID: " + details.tabId);
+  console.log("Transition type: " + details.transitionType);
+  console.log("Transition qualifiers: " + details.transitionQualifiers);
+
+  if (newTab == true)
+  {
+    console.log("This was a new tab from: " + originIdForNewTab);    
+    newTab = false;
+    originIdForNewTab = -1;
+  }
 }
 
-function listener(details)
+function checkOnCreatedNavigationTarget(details)
 {
-  console.log(details);
+  newTab = true;
+  originIdForNewTab = details.sourceTabId;
 }
 
-browser.webNavigation.onHistoryStateUpdated.addListener(listener)
+browser.webNavigation.onCommitted.addListener(logOnHistoryStateUpdated);
+browser.webNavigation.onCreatedNavigationTarget.addListener(checkOnCreatedNavigationTarget);
 
-heloWolrd("World");
-console.info("Memex: Background script has run");
+console.info("Memex7: The background script has loaded");

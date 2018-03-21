@@ -11,6 +11,9 @@
 		"96": "icons/google-circles-extended.svg"
 	},
 
+	"permissions": [
+		"webNavigation"
+	],
 	
 	"background": {
 		"scripts": ["background/background-script.js"]
