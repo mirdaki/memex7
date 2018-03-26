@@ -12,7 +12,8 @@
 	},
 
 	"permissions": [
-		"webNavigation"
+		"webNavigation",
+		"tabs"
 	],
 	
 	"background": {
