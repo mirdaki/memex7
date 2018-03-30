@@ -118,8 +118,8 @@ function initializeRecording()
   data = {nodes: []};
 
   // Set up the events
-  browser.webNavigation.onCommitted.addListener(logOnHistoryStateUpdated);
   browser.webNavigation.onCreatedNavigationTarget.addListener(checkOnCreatedNavigationTarget);  
+  browser.webNavigation.onCommitted.addListener(logOnHistoryStateUpdated);
 }
 
 // TODO: Called when a message is sent
@@ -130,6 +130,7 @@ function stopRecording()
   browser.webNavigation.onCreatedNavigationTarget.removeListener(checkOnCreatedNavigationTarget);  
 
   // Save the data
+  storage.save()
 }
 
 initializeRecording();
