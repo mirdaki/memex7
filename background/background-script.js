@@ -12,7 +12,7 @@ let originIdForNewTab = -1;
 
 // Data structure for storage
 let data = {nodes: []};
-
+//let myStorage = Storage.localStorage;
 // Create the recording of the tab being created
 function logOnHistoryStateUpdated(details)
 {
@@ -97,7 +97,7 @@ function recordTabData(details)
     (info) => {savedTab.title = info.title; savedTab.favicon = info.favIconUrl},
     (error) => console.error(`Error: ${error}`)
   );
-
+    
   // Remove the event listener
   browser.webNavigation.onCompleted.removeListener(recordTabData);
 }
@@ -133,6 +133,14 @@ function stopRecording()
   storage.save()
 }
 
-initializeRecording();
+function handleMessage(request, sender, sendResponse) {
+  console.log("Message from the content script: " +
+    request.greeting);
+  initializeRecording();
+  sendResponse({response: "Response from background script"});
+
+}
+browser.runtime.onMessage.addListener(handleMessage);
+
 
 console.info("Memex7: The background script has loaded");
