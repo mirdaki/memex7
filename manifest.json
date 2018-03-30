@@ -13,7 +13,8 @@
 
 	"permissions": [
 		"webNavigation",
-		"tabs"
+		"tabs",
+		"storage"
 	],
 	
 	"background": {

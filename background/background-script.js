@@ -100,7 +100,10 @@ function recordTabData(details)
     
   // Remove the event listener
   browser.webNavigation.onCompleted.removeListener(recordTabData);
-}
+
+  // Store the data
+  browser.storage.local.set({data: data});
+ }
 
 // Adds flag to see if the page is a new tab, runs before logOnHistoryStateUpdated
 function checkOnCreatedNavigationTarget(details)
@@ -128,9 +131,6 @@ function stopRecording()
   // Set up the events
   browser.webNavigation.onCommitted.removeListener(logOnHistoryStateUpdated);
   browser.webNavigation.onCreatedNavigationTarget.removeListener(checkOnCreatedNavigationTarget);  
-
-  // Save the data
-  storage.save()
 }
 
 function handleMessage(request, sender, sendResponse) {
