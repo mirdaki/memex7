@@ -142,8 +142,6 @@ function stopRecording()
 	  browser.webNavigation.onCommitted.removeListener(logOnHistoryStateUpdated);
 	  browser.webNavigation.onCreatedNavigationTarget.removeListener(checkOnCreatedNavigationTarget);  
 
-	  // Save the data
-	  storage.save()
 	  isRecording=false;
 	}
 }
