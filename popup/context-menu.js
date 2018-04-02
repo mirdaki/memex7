@@ -13,6 +13,7 @@ function listenForClicks()
 	document.getElementById('record').addEventListener('click', record);
     document.getElementById('stop').addEventListener('click', stop);
     document.getElementById('view').addEventListener('click', view);
+	
 }
 
 function record()
@@ -25,7 +26,7 @@ function stop()
 }
 function view()
 {
-	notifyBackgroundPage("view");
+	browser.tabs.create({url: "/new_tab/htree.html"});
 }
 // There was an error executing the script
 // Display the popup's error message, and hide the normal UI

@@ -1,4 +1,4 @@
-let theData = browser.storage.local.get([data]);
+let theData = browser.storage.local.get("data");
 
  function checkforChild(i)
  {
@@ -24,8 +24,8 @@ document.writeln("<div class=\"tree\">");
 document.writeln("<ul>");
  
 for(i = 0;i<theData.length;i++){	    
-	document.writeln("<li>");
-		document.writeln("<a href=\"#\">");
+	document.writeln("<li>");	
+		document.writeln("<a href=" + theData[i].url +">");
 			document.writeln("<div class=\"img-circle\">");
 				document.writeln(" <div class=\"popup\">");
 					document.writeln("Title: " + theData[i].title +"\n");
