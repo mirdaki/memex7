@@ -25,7 +25,8 @@ function stop()
 }
 function view()
 {
-	notifyBackgroundPage("view");
+	browser.tabs.create({url: "/new_tab/htree.html"});
+	//notifyBackgroundPage("view");
 }
 // There was an error executing the script
 // Display the popup's error message, and hide the normal UI
