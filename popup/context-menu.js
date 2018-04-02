@@ -10,8 +10,23 @@ function listenForClicks()
 			console.error(`There was an error: ${error}`);
 		}
 	});
+	document.getElementById('record').addEventListener('click', record);
+    document.getElementById('stop').addEventListener('click', stop);
+    document.getElementById('view').addEventListener('click', view);
 }
 
+function record()
+{
+	notifyBackgroundPage("record");
+}
+function stop()
+{
+	notifyBackgroundPage("stop");
+}
+function view()
+{
+	notifyBackgroundPage("view");
+}
 // There was an error executing the script
 // Display the popup's error message, and hide the normal UI
 function reportExecuteScriptError(error) 
@@ -25,13 +40,13 @@ function handleResponse(message) {
 }
 
 function handleError(error) {
-  console.log(`Error: ${error}`);
+  //console.log(`Error: ${error}`);
 }
 
 
-function notifyBackgroundPage(e) {
+function notifyBackgroundPage(_type) {
   var sending = browser.runtime.sendMessage({
-    greeting: "Greeting from the content script"
+    greeting: _type
   });
   sending.then(handleResponse, handleError);  
 }
