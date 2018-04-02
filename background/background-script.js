@@ -6,7 +6,7 @@ let currentRecordedTabIds = [];
 
 // Count of IDs to assign
 let idNum = 0;
-
+let isRecording = false;
 // Flag for if page is a new tab (will be updated with parent ID if it's a new tab)
 let originIdForNewTab = -1;
 
@@ -100,10 +100,10 @@ function recordTabData(details)
     
   // Remove the event listener
   browser.webNavigation.onCompleted.removeListener(recordTabData);
-
+  
   // Store the data
-  browser.storage.local.set({data: data});
- }
+   browser.storage.local.set({data: data});
+}
 
 // Adds flag to see if the page is a new tab, runs before logOnHistoryStateUpdated
 function checkOnCreatedNavigationTarget(details)
@@ -114,29 +114,56 @@ function checkOnCreatedNavigationTarget(details)
 // TODO: Called when a message is sent
 function initializeRecording()
 {
-  // Reset default values
-  currentRecordedTabIds = [];
-  idNum = 0;
-  originIdForNewTab = -1;
-  data = {nodes: []};
+	if(isRecording==false)
+	{
+		console.info("started recording");
+	  // Reset default values
+	  currentRecordedTabIds = [];
+	  idNum = 0;
+	  originIdForNewTab = -1;
+	  data = {nodes: []};
 
-  // Set up the events
-  browser.webNavigation.onCreatedNavigationTarget.addListener(checkOnCreatedNavigationTarget);  
-  browser.webNavigation.onCommitted.addListener(logOnHistoryStateUpdated);
+	  // Set up the events
+	  browser.webNavigation.onCreatedNavigationTarget.addListener(checkOnCreatedNavigationTarget);  
+	  browser.webNavigation.onCommitted.addListener(logOnHistoryStateUpdated);
+	  isRecording=true;
+	}
 }
 
 // TODO: Called when a message is sent
 function stopRecording()
 {
-  // Set up the events
-  browser.webNavigation.onCommitted.removeListener(logOnHistoryStateUpdated);
-  browser.webNavigation.onCreatedNavigationTarget.removeListener(checkOnCreatedNavigationTarget);  
+	browser.webNavigation.onCommitted.removeListener(logOnHistoryStateUpdated);
+    browser.webNavigation.onCreatedNavigationTarget.removeListener(checkOnCreatedNavigationTarget);
+	if(isRecording==true)
+	{
+		console.info("stopped recording");
+	  // Set up the events
+	  browser.webNavigation.onCommitted.removeListener(logOnHistoryStateUpdated);
+	  browser.webNavigation.onCreatedNavigationTarget.removeListener(checkOnCreatedNavigationTarget);  
+
+	  // Save the data
+	  storage.save()
+	  isRecording=false;
+	}
 }
 
 function handleMessage(request, sender, sendResponse) {
   console.log("Message from the content script: " +
     request.greeting);
-  initializeRecording();
+	if(request.greeting==="record")
+	{
+		initializeRecording();
+	}
+		if(request.greeting==="stop")
+	{
+		stopRecording();
+	}
+		if(request.greeting==="view")
+	{
+		//initializeRecording();
+	}
+  
   sendResponse({response: "Response from background script"});
 
 }
