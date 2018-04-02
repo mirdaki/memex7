@@ -100,10 +100,10 @@ function recordTabData(details)
     
   // Remove the event listener
   browser.webNavigation.onCompleted.removeListener(recordTabData);
-  
+
   // Store the data
-   browser.storage.local.set({data: data});
-}
+  browser.storage.local.set({data: data});
+ }
 
 // Adds flag to see if the page is a new tab, runs before logOnHistoryStateUpdated
 function checkOnCreatedNavigationTarget(details)
@@ -116,7 +116,6 @@ function initializeRecording()
 {
 	if(isRecording==false)
 	{
-		console.info("started recording");
 	  // Reset default values
 	  currentRecordedTabIds = [];
 	  idNum = 0;
@@ -126,26 +125,25 @@ function initializeRecording()
 	  // Set up the events
 	  browser.webNavigation.onCreatedNavigationTarget.addListener(checkOnCreatedNavigationTarget);  
 	  browser.webNavigation.onCommitted.addListener(logOnHistoryStateUpdated);
-	  isRecording=true;
+  	  isRecording=true;
 	}
 }
 
 // TODO: Called when a message is sent
 function stopRecording()
 {
-	browser.webNavigation.onCommitted.removeListener(logOnHistoryStateUpdated);
-    browser.webNavigation.onCreatedNavigationTarget.removeListener(checkOnCreatedNavigationTarget);
-	if(isRecording==true)
+		if(isRecording==true)
 	{
 		console.info("stopped recording");
 	  // Set up the events
 	  browser.webNavigation.onCommitted.removeListener(logOnHistoryStateUpdated);
 	  browser.webNavigation.onCreatedNavigationTarget.removeListener(checkOnCreatedNavigationTarget);  
 
+
 	  isRecording=false;
 	}
+  // Set up the events
 }
-
 function handleMessage(request, sender, sendResponse) {
   console.log("Message from the content script: " +
     request.greeting);
@@ -162,6 +160,14 @@ function handleMessage(request, sender, sendResponse) {
 		//initializeRecording();
 	}
   
+  sendResponse({response: "Response from background script"});
+
+}
+browser.runtime.onMessage.addListener(handleMessage);
+function handleMessage(request, sender, sendResponse) {
+  console.log("Message from the content script: " +
+    request.greeting);
+  initializeRecording();
   sendResponse({response: "Response from background script"});
 
 }
