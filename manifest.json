@@ -25,7 +25,7 @@
 	},
 
 	"browser_action": {
-    "default_icon": "icons/google-circles-extended.svg",
+    "default_icon": "icons/google-circles-extended.png",
     "default_title": "Memex7",
     "default_popup": "popup/context-menu.html"
   }

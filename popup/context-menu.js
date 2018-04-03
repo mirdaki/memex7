@@ -19,10 +19,13 @@ function listenForClicks()
 function record()
 {
 	notifyBackgroundPage("record");
+	browser.browserAction.setBadgeText({text: "rec"});
+	browser.browserAction.setBadgeBackgroundColor({color: "red"});
 }
 function stop()
 {
 	notifyBackgroundPage("stop");
+	browser.browserAction.setBadgeText({text: ''});
 }
 function view()
 {
