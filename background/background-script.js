@@ -92,17 +92,21 @@ function recordTabData(details)
   let savedTab = data.nodes.find(tab => tab.id === tempTab.id);
 
   // Set the favicon and title
+  console.log("made it favicon stuff for " + details.tabId);
   let currentTab = browser.tabs.get(details.tabId);
   currentTab.then(
-    (info) => {savedTab.title = info.title; savedTab.favicon = info.favIconUrl},
-    (error) => console.error(`Error: ${error}`)
-  );
-    
-  // Remove the event listener
+    (info) => {savedTab.title = info.title; savedTab.favicon = info.favIconUrl
+	  // Remove the event listener
   browser.webNavigation.onCompleted.removeListener(recordTabData);
   
   // Store the data
    browser.storage.local.set({data: data});
+	
+	},
+    (error) => console.error(`Error: ${error}`)
+  );
+    
+
 }
 
 // Adds flag to see if the page is a new tab, runs before logOnHistoryStateUpdated
