@@ -26,6 +26,7 @@ for(i = 0;i<theData.data.nodes.length;i++){
 	if(i==0)
 		getparent = document.getElementById("root");
 	getparent.appendChild(li);
+	getparent.setAttribute("name", "parent");
 	
 	var info = document.createElement("a");
 	li.appendChild(info);
@@ -57,9 +58,17 @@ for(i = 0;i<theData.data.nodes.length;i++){
 		li.appendChild(childul);	
 		var idno = "" +theData.data.nodes[i].id;
 		childul.setAttribute("id", idno);
+		childul.setAttribute("name", "solo");
 		
 	} 				
 				
 	}	
+	
+	var elem = document.getElementsByName("solo");
+	
+var i;	
+	for (i = elem.length-1; i > -1; i--) {
+		console.log(i + " Deleted");
+		elem[i].parentNode.removeChild(elem[i]);
+		}
 });
-console.log("End of the Line");
