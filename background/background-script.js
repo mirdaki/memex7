@@ -165,7 +165,7 @@ function handleMessage(request, sender, sendResponse) {
 		//initializeRecording();
 	}
   
-  sendResponse({response: "Response from background script"});
+  //sendResponse({response: "Response from background script"});
 
 }
 browser.runtime.onMessage.addListener(handleMessage);
