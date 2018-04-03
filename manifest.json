@@ -7,7 +7,7 @@
 	"homepage_url": "https://github.com/mirdaki/memex7",
 
 	"icons": {
-		"48": "icons/google-circles-extended.svg",
+		"48": "icons/google-circles-extended.png",
 		"96": "icons/google-circles-extended.svg"
 	},
 
