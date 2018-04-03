@@ -1,6 +1,7 @@
 /*Now the CSS*/
 
 * {
+	box-sizing: inherit;
   margin: 0;
   padding: 0;
 }
@@ -16,6 +17,7 @@
   left: 150%;
   background-color: white;
   visibility: hidden;
+	opacity: 0;
 }
 
 img {
@@ -30,10 +32,12 @@ img {
 }
 
 .tree {
+	box-sizing: border-box;
   overflow: auto;
 }
 
 .tree ul {
+	white-space: nowrap; /*Prevents Wrapping*/
   padding-top: 20px;
   position: relative;
   transition: all 0.5s;
@@ -42,7 +46,10 @@ img {
 }
 
 .tree li {
-  float: left;
+	display: inline-block; /*Display inline and maintain block characteristics.*/
+  vertical-align: top; /*Makes sure all the divs are correctly aligned.*/
+  white-space: normal; /*Prevents child elements from inheriting nowrap.*/
+  /*float: left;/**/
   text-align: center;
   list-style-type: none;
   position: relative;
@@ -61,7 +68,7 @@ img {
   top: 0;
   right: 50%;
   border-top: 1px solid #ccc;
-  width: 50%;
+  width: 58%;
   height: 20px;
 }
 
@@ -154,6 +161,11 @@ right connector from last child*/
 
 .tree li a:hover>.img-circle>.popup {
   visibility: visible;
+	transition: all 0.6s ease-in-out;
+  -webkit-transition: all 0.6s ease-in-out;
+  -moz-transition: all 0.6s ease-in-out;
+	opacity: 1;
+	
 }
 
 /*Connector styles on hover*/
