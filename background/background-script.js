@@ -133,8 +133,7 @@ function initializeRecording()
 // TODO: Called when a message is sent
 function stopRecording()
 {
-	browser.webNavigation.onCommitted.removeListener(logOnHistoryStateUpdated);
-    browser.webNavigation.onCreatedNavigationTarget.removeListener(checkOnCreatedNavigationTarget);
+
 	if(isRecording==true)
 	{
 		console.info("stopped recording");
