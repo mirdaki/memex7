@@ -52,7 +52,6 @@ for(i = 0;i<theData.data.nodes.length;i++){
 	img.setAttribute("src",favicon);
 
 	if(i != theData.data.nodes.length-1)
-	if(checkforChild(i))	
 	{
 		var childul = document.createElement( "ul");
 		li.appendChild(childul);	
