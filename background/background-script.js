@@ -27,12 +27,14 @@ function logOnHistoryStateUpdated(details)
   console.log(`ID from origin if this was a new tab (-1 otherwise): ${originIdForNewTab}`);
   console.groupEnd();  
 
-  // Don't record tabs that aren't related to the first tab recorded
-  // If no tab is being recorded, assume it is the root
-  if (currentRecordedTabIds.length == 0)
+  // See if this isn't one of the tabs being recorded or it was redirected 
+  if (!currentRecordedTabIds.find(tab => tab.tabId === details.tabId) ||
+  details.transitionType == "auto_subframe" ||
+  details.transitionType == "form_submit" ||    
+  details.transitionQualifiers == "client_redirect")
   {
-    // Add the tab to the recorded list, parent is itself
-    currentRecordedTabIds.push({id: idNum, tabId: details.tabId});
+    // Exit if it is not being recorded
+    return;
   }
   // If this was a new tab and it's parent was recorded
   else if (currentRecordedTabIds.find(tab => tab.tabId === originIdForNewTab))
@@ -41,14 +43,12 @@ function logOnHistoryStateUpdated(details)
     let parentId = currentRecordedTabIds.find(tab => tab.tabId === originIdForNewTab)
     currentRecordedTabIds.push({id: parentId.id, tabId: details.tabId});    
   }
-  // See if this isn't one of the tabs being recorded or it was redirected 
-  else if (!currentRecordedTabIds.find(tab => tab.tabId === details.tabId) ||
-    details.transitionType == "auto_subframe" ||
-    details.transitionType == "form_submit" ||    
-    details.transitionQualifiers == "client_redirect")
+  // Don't record tabs that aren't related to the first tab recorded
+  // If no tab is being recorded, assume it is the root
+  else if (currentRecordedTabIds.length == 0)
   {
-    // Exit if it is not being recorded
-    return;
+    // Add the tab to the recorded list, parent is itself
+    currentRecordedTabIds.push({id: idNum, tabId: details.tabId});
   }
 
   // Current tab information
@@ -95,13 +95,15 @@ function recordTabData(details)
   console.log("made it favicon stuff for " + details.tabId);
   let currentTab = browser.tabs.get(details.tabId);
   currentTab.then(
-    (info) => {savedTab.title = info.title; savedTab.favicon = info.favIconUrl
-	  // Remove the event listener
-  browser.webNavigation.onCompleted.removeListener(recordTabData);
-  
-  // Store the data
-   browser.storage.local.set({data: data});
-	
+    (info) => {
+      savedTab.title = info.title; 
+      savedTab.favicon = info.favIconUrl;
+
+      // Remove the event listener
+      browser.webNavigation.onCompleted.removeListener(recordTabData);
+
+      // Store the data
+      browser.storage.local.set({data: data});
 	},
     (error) => console.error(`Error: ${error}`)
   );
@@ -125,7 +127,17 @@ function initializeRecording()
 	  currentRecordedTabIds = [];
 	  idNum = 0;
 	  originIdForNewTab = -1;
-	  data = {nodes: []};
+    data = {nodes: []};
+    
+    // TODO: Assuming that the current tab was recorded
+    let getData = browser.storage.local.get("firstTabId");
+    getData.then(
+      (info) => {
+        currentRecordedTabIds.push({id: idNum, tabId: info});
+        ++idNum;
+      },
+      (error) => console.error(`Error: ${error}`)
+    );
 
 	  // Set up the events
 	  browser.webNavigation.onCreatedNavigationTarget.addListener(checkOnCreatedNavigationTarget);  
@@ -156,11 +168,11 @@ function handleMessage(request, sender, sendResponse) {
 	{
 		initializeRecording();
 	}
-		if(request.greeting==="stop")
+	if(request.greeting==="stop")
 	{
 		stopRecording();
 	}
-		if(request.greeting==="view")
+	if(request.greeting==="view")
 	{
 		//initializeRecording();
 	}

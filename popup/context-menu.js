@@ -18,6 +18,7 @@ function listenForClicks()
 
 function record()
 {
+	recordCurrentPage();
 	notifyBackgroundPage("record");
 	browser.browserAction.setBadgeText({text: "rec"});
 	browser.browserAction.setBadgeBackgroundColor({color: "red"});
@@ -53,6 +54,33 @@ function notifyBackgroundPage(_type) {
     greeting: _type
   });
   sending.then(handleResponse, handleError);  
+}
+
+// Get current page and set it as a tab
+function recordCurrentPage() {
+	let gettingCurrent = browser.tabs.getCurrent();
+
+	gettingCurrent.then(
+		(info) => {
+
+			// Get current tab data
+			let tabData;
+			tabData.title = info.title; 
+			tabData.favicon = info.favIconUrl;
+			tabData.url = info.url;
+			tabData.id = 0;
+			tabData.parent = 0;
+						
+			// Store data
+			let data = {nodes: []};
+			data.nodes.push(tabData);
+			browser.storage.local.set({data: data});
+
+			// Store tabId
+			browser.storage.local.set({firstTabId: info.id});			
+		},
+		(error) => console.error(`Error: ${error}`)
+	);
 }
 
 console.log(`Memex7: Was loaded!`);
