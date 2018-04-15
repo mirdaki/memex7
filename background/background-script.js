@@ -6,12 +6,19 @@ let currentRecordedTabIds = [];
 
 // Count of IDs to assign
 let idNum = 0;
+
+// Flag for data
 let isRecording = false;
+
 // Flag for if page is a new tab (will be updated with parent ID if it's a new tab)
 let originIdForNewTab = -1;
 
 // Data structure for storage
 let data = {nodes: []};
+
+// Record existing tabs in-order to ignore
+let existingTabs = [];
+
 //let myStorage = Storage.localStorage;
 // Create the recording of the tab being created
 function logOnHistoryStateUpdated(details)
@@ -32,7 +39,7 @@ function logOnHistoryStateUpdated(details)
   if (currentRecordedTabIds.length == 0)
   {
     // Add the tab to the recorded list, parent is itself
-    currentRecordedTabIds.push({id: idNum, tabId: details.tabId});
+    currentRecordedTabIds.push({id: -1, tabId: details.tabId});
   }
   // If this was a new tab and it's parent was recorded
   else if (currentRecordedTabIds.find(tab => tab.tabId === originIdForNewTab))
@@ -41,11 +48,24 @@ function logOnHistoryStateUpdated(details)
     let parentId = currentRecordedTabIds.find(tab => tab.tabId === originIdForNewTab)
     currentRecordedTabIds.push({id: parentId.id, tabId: details.tabId});    
   }
+  // If this isn't one of the tabs being recorded and it wasn't there before
+  // Not a new tab link
+  // Not a used tab
+  // Not a existing tab
+  else if (originIdForNewTab == -1 &&
+    !currentRecordedTabIds.find(tab => tab.tabId === details.tabId) && 
+    !existingTabs.find(id => id === details.tabId) &&
+    details.url.match('moz-extension') != 'moz-extension')
+  {
+    // This will be a new "root" for a new tree
+    currentRecordedTabIds.push({id: -1, tabId: details.tabId});
+  }
   // See if this isn't one of the tabs being recorded or it was redirected 
   else if (!currentRecordedTabIds.find(tab => tab.tabId === details.tabId) ||
     details.transitionType == "auto_subframe" ||
     details.transitionType == "form_submit" ||    
-    details.transitionQualifiers == "client_redirect")
+    details.transitionQualifiers == "client_redirect" ||
+    details.url.match('moz-extension') != 'moz-extension')
   {
     // Exit if it is not being recorded
     return;
@@ -125,7 +145,19 @@ function initializeRecording()
 	  currentRecordedTabIds = [];
 	  idNum = 0;
 	  originIdForNewTab = -1;
-	  data = {nodes: []};
+    data = {nodes: []};
+    existingTabs = [];
+    
+    // Record existing tabs in-order to ignore them
+    let querying = browser.tabs.query({});
+    querying.then(
+      (tabs) => {
+        for (let tab of tabs) {
+          existingTabs.push(tab.id);
+        }
+      }, 
+      (error) => console.log(`Error: ${error}`)
+    );
 
 	  // Set up the events
 	  browser.webNavigation.onCreatedNavigationTarget.addListener(checkOnCreatedNavigationTarget);  
