@@ -16,15 +16,32 @@ getData.then(function(theData){
 	document.body.appendChild(tree);
 	tree.setAttribute("class", "tree");
 	
+	var baseul = document.createElement("ul");
+	tree.appendChild(baseul);
+	baseul.setAttribute("id" ,"base");
+	
+	var rootli = document.createElement("li");
+	baseul.appendChild(rootli);
+	rootli.setAttribute("name", "base"); 
+	
+	var licircle = document.createElement("d");
+	rootli.appendChild(licircle);
+	licircle.setAttribute("class","img-circle");
+	licircle.setAttribute("id","rect");
+	
+	var img = document.createElement("img");
+	licircle.appendChild(img);
+	var favicon = "";
+	img.setAttribute("src",favicon);
+	
 	var rootul = document.createElement("ul");
-	tree.appendChild(rootul);
-	rootul.setAttribute("id" ,"root");
+	rootli.appendChild(rootul);
+	rootul.setAttribute("id" ,"-1");
+	
 	
 for(i = 0;i<theData.data.nodes.length;i++){
 	var li = document.createElement("li");
 	var getparent = document.getElementById(theData.data.nodes[i].parent);
-	if(i==0)
-		getparent = document.getElementById("root");
 	getparent.appendChild(li);
 	getparent.setAttribute("name", "parent");
 	
@@ -32,6 +49,7 @@ for(i = 0;i<theData.data.nodes.length;i++){
 	li.appendChild(info);
 	var refurl = "" + theData.data.nodes[i].url;
 	info.setAttribute("href", refurl);	
+	info.setAttribute("target","_blank");
 	
 	var imgcircle = document.createElement("d");
 	info.appendChild(imgcircle);
