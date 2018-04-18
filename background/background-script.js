@@ -60,6 +60,15 @@ function logOnHistoryStateUpdated(details)
     // This will be a new "root" for a new tree
     currentRecordedTabIds.push({id: -1, tabId: details.tabId});
   }
+  else if (originIdForNewTab == -1 &&
+    currentRecordedTabIds.find(tab => tab.tabId === details.tabId) &&
+    !(details.transitionType == "auto_subframe" ||
+    details.transitionType == "form_submit" ||    
+    details.transitionQualifiers == "client_redirect"))
+  {
+    // This will be a new "root" for a new tree
+    // currentRecordedTabIds.push({id: -1, tabId: details.tabId});
+  }
   // See if this isn't one of the tabs being recorded or it was redirected 
   else if (!currentRecordedTabIds.find(tab => tab.tabId === details.tabId) ||
     details.transitionType == "auto_subframe" ||
