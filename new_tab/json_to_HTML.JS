@@ -2,19 +2,14 @@ let getData = browser.storage.local.get();
 
 getData.then(function(theData){	
 
- function checkforChild(i)
- {
-	 if(theData.data.nodes[i].id == theData.data.nodes[i+1].parent)
-	 {
-		 return true;
-	 }
-	 
-	 return false;
- }
+	var grid1 = document.createElement("d")
+	document.body.appendChild(grid1)
+	grid1.setAttribute("class", "grid-container")
  	
+	
 	var tree = document.createElement("d");
 	document.body.appendChild(tree);
-	tree.setAttribute("class", "tree");
+	tree.setAttribute("class", "tree grid-item");
 	
 	var baseul = document.createElement("ul");
 	tree.appendChild(baseul);
@@ -24,10 +19,23 @@ getData.then(function(theData){
 	baseul.appendChild(rootli);
 	rootli.setAttribute("name", "base"); 
 	
+	var rectgrid = document.createElement("d")
+	rootli.appendChild(rectgrid)
+	rectgrid.setAttribute("class", "grid-container")
+	
+	var griditem1 = document.createElement("d")
+	rectgrid.appendChild(griditem1)
+	griditem1.setAttribute("class", "grid-item")
+	
 	var licircle = document.createElement("d");
-	rootli.appendChild(licircle);
-	licircle.setAttribute("class","img-circle");
+	rectgrid.appendChild(licircle);
+	licircle.appendChild(document.createTextNode("Your Memex^7 Tree"));	
+	licircle.setAttribute("class","grid-item");
 	licircle.setAttribute("id","rect");
+	
+	var griditem2 = document.createElement("d")
+	rectgrid.appendChild(griditem2)
+	griditem2.setAttribute("class", "grid-item")
 	
 	var img = document.createElement("img");
 	licircle.appendChild(img);
@@ -81,6 +89,10 @@ for(i = 0;i<theData.data.nodes.length;i++){
 	} 				
 				
 	}	
+	
+	var grid3 = document.createElement("d")
+	document.body.appendChild(grid3)
+	grid3.setAttribute("class", "grid-container")
 	
 	var elem = document.getElementsByName("solo");
 	
